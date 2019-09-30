@@ -1,0 +1,113 @@
+
+CREATE TABLE `airport` (
+  `airport_id` int(11) NOT NULL,
+  `airport_name` varchar(45) NOT NULL,
+  `air_key` int(11) NOT NULL,
+  `state` varchar(100) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `pincode` int(11) NOT NULL,
+  `country` varchar(100) NOT NULL,
+  PRIMARY KEY (`airport_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+
+
+
+
+
+CREATE TABLE `booking` (
+  `booking_id` int(11) NOT NULL,
+  `passengar_id` int(11) NOT NULL,
+  `airport_id` int(11) NOT NULL,
+  `class_id` int(11) NOT NULL,
+  `p_dest_from` varchar(45) NOT NULL,
+  `p_dest_to` varchar(45) NOT NULL,
+  `flight_schedule_id` int(11) NOT NULL,
+  PRIMARY KEY (`booking_id`),
+  KEY `booking_fk` (`class_id`),
+  KEY `booking_fk_1` (`airport_id`),
+  KEY `booking_fk_2` (`passengar_id`),
+  KEY `booking_fk_3` (`flight_schedule_id`),
+  CONSTRAINT `booking_fk` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`),
+  CONSTRAINT `booking_fk_1` FOREIGN KEY (`airport_id`) REFERENCES `airport` (`airport_id`),
+  CONSTRAINT `booking_fk_2` FOREIGN KEY (`passengar_id`) REFERENCES `passengar_details` (`passengar_id`),
+  CONSTRAINT `booking_fk_3` FOREIGN KEY (`flight_schedule_id`) REFERENCES `flight_schedule` (`flight_schedule_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+
+
+
+
+CREATE TABLE `class` (
+  `class_id` int(11) NOT NULL AUTO_INCREMENT,
+  `class_name` varchar(45) NOT NULL,
+  `price` int(11) NOT NULL,
+  PRIMARY KEY (`class_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+
+
+
+
+CREATE TABLE `employee` (
+  `emp_id` int(11) NOT NULL AUTO_INCREMENT,
+  `airport_id` int(11) NOT NULL,
+  `emp_type` varchar(45) NOT NULL,
+  `emp_name` varchar(45) NOT NULL,
+  `gender` varchar(45) NOT NULL,
+  `date_of_birth` date NOT NULL,
+  `address` varchar(45) NOT NULL,
+  `phone_no` int(11) NOT NULL,
+  PRIMARY KEY (`emp_id`),
+  KEY `employee_fk` (`airport_id`),
+  CONSTRAINT `employee_fk` FOREIGN KEY (`airport_id`) REFERENCES `airport` (`airport_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+
+
+
+
+CREATE TABLE `flight_schedule` (
+  `flight_schedule_id` int(11) NOT NULL,
+  `date_of_flying` date NOT NULL,
+  `arrival_time` time NOT NULL,
+  `departure_time` time NOT NULL,
+  `airport_id` int(11) NOT NULL,
+  PRIMARY KEY (`flight_schedule_id`),
+  KEY `flight_schedule_fk` (`airport_id`),
+  CONSTRAINT `flight_schedule_fk` FOREIGN KEY (`airport_id`) REFERENCES `airport` (`airport_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+
+
+
+
+CREATE TABLE `passengar_details` (
+  `passengar_id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(45) NOT NULL,
+  `last_name` varchar(45) NOT NULL,
+  `gender` varchar(45) NOT NULL,
+  `date_of_birth` date NOT NULL,
+  `phone_no.` int(11) NOT NULL,
+  PRIMARY KEY (`passengar_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+
+
+
+
+CREATE TABLE `seats_booking` (
+  `booking_id` int(11) NOT NULL,
+  `passengar_id` int(11) NOT NULL,
+  `seats_no` int(11) NOT NULL,
+  PRIMARY KEY (`booking_id`,`passengar_id`),
+  KEY `seats_booking_fk_1` (`passengar_id`),
+  CONSTRAINT `seats_booking_fk` FOREIGN KEY (`booking_id`) REFERENCES `booking` (`booking_id`),
+  CONSTRAINT `seats_booking_fk_1` FOREIGN KEY (`passengar_id`) REFERENCES `passengar_details` (`passengar_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
